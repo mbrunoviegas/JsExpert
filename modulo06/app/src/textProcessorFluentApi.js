@@ -1,3 +1,4 @@
+import { Person } from './person.js'
 import { evaluateRegex } from './util.js'
 
 export class TextProcessorFluentAPI {
@@ -8,7 +9,7 @@ export class TextProcessorFluentAPI {
   }
 
   extractPeopleData() {
-    this.#content = this.#content.match(/(?<=[contratante|contratada]:\s{1})(?!\s)(.*\n.*?)$/gmi)
+    this.#content = this.#content.match(/(?<=[contratante|contratada]:\s)(?!\s)(.*\n.*?)$/gmi)
     return this
   }
 
@@ -21,6 +22,11 @@ export class TextProcessorFluentAPI {
   removeEmptyCharacters() {
     const trimSpaces = evaluateRegex(/^\s+|\s+$|\n/g)
     this.#content = this.#content.map(line => line.map(column => column.replace(trimSpaces, '')))
+    return this
+  }
+
+  mapPerson() {
+    this.#content = this.#content.map(line => new Person(line))
     return this
   }
 
